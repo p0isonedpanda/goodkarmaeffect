@@ -1,7 +1,19 @@
 version: '2'
 
 services:
+    elgg:
+        container_name: elgg
+        image: johnlonganecker/elgg
+        restart: always
+        volumes:
+            - ./html:/var/www/html
+        ports:
+            - 80:80
+        depends_on:
+            - mariadb
+
     mariadb:
+        container_name: mariadb
         image: mariadb/server
         restart: always
         environment:
@@ -9,13 +21,3 @@ services:
         volumes:
             - ./mariadb/volume:/vol
             - ./mariadb/my.cnf:/etc/mysql/my.cnf
-
-    website:
-        build: ./website
-        restart: always
-        volumes:
-            - ./website/html:/var/www/html
-        ports:
-            - 80:80
-        depends_on:
-            - mariadb
